@@ -1,0 +1,315 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile Game Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#071226;color:#fff;font-family:Arial,sans-serif}
+header{text-align:center;padding:28px 14px;background:linear-gradient(135deg,#102c59,#31195b)}
+header h1{font-size:30px;margin:10px}
+p{line-height:1.6;color:#b9c9e6}
+button{cursor:pointer;font-weight:bold}
+.blue{background:#1685ff;color:white;border:0;padding:13px 20px;border-radius:12px}
+.btn{background:#1d3152;color:white;border:1px solid #40577c;padding:10px;border-radius:10px}
+main{max-width:850px;margin:auto;padding:14px}
+.panel{background:#111e35;border:1px solid #2b4269;border-radius:18px;padding:16px;margin-bottom:16px}
+.hidden{display:none!important}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.game{background:#1a2b49;border:1px solid #40577c;color:white;border-radius:14px;padding:17px 8px;min-height:125px}
+.game span{display:block;font-size:32px;margin-bottom:10px}
+.game small{display:block;color:#b9c9e6;margin-top:7px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.phone{width:220px;height:390px;position:relative;margin:18px auto;border:5px solid #8993a4;border-radius:32px;background:#0b1020;box-shadow:0 12px 35px #0008;overflow:hidden}
+.screen{position:absolute;inset:7px;border-radius:23px;background:linear-gradient(140deg,#152748,#080c18);overflow:hidden}
+.part-tray{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.part{background:#1a2b49;border:1px solid #40577c;border-radius:12px;text-align:center;padding:10px 2px;touch-action:none;user-select:none}
+.part span{display:block;font-size:24px;margin-bottom:5px}
+.part small{font-size:11px}
+.piece{position:absolute;z-index:3;transform:translate(-50%,-50%);pointer-events:none}
+.status{color:#82edc4;min-height:22px;font-size:14px}
+.colors{display:flex;gap:12px;flex-wrap:wrap}
+.dot{width:42px;height:42px;border:3px solid white;border-radius:50%}
+#memoryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mem{height:65px;background:#21365a;color:white;border:1px solid #40577c;border-radius:12px;font-size:25px}
+#tapArea{height:280px;background:#09152b;border-radius:14px;position:relative;overflow:hidden;margin-top:15px}
+.target{position:absolute;width:55px;height:55px;border:0;border-radius:50%;background:#1685ff;color:white;font-size:25px}
+input{width:100%;padding:13px;border-radius:10px;background:#09152b;color:white;border:1px solid #40577c;font-size:18px}
+footer{text-align:center;color:#8194b6;padding:20px;font-size:12px}
+@media(min-width:600px){.games{grid-template-columns:repeat(3,1fr)}.phone{width:240px;height:420px}}
+</style>
+</head>
+<body>
+<header>
+<div style="font-size:42px">🎮</div>
+<h1>Mobile Game Studio</h1>
+<p>Welcome, Creator!<br>Build, design and play. Your imagination is the limit.</p>
+<button class="blue" onclick="showHome()">▶ PLAY GAME</button>
+</header>
+
+<main>
+<section id="home" class="panel">
+<h2>Choose Your Game</h2>
+<p>Five mini-games are waiting for you!</p>
+<div class="games">
+<button class="game" onclick="openGame('design')"><span>📱</span>Design Your Phone<small>Drag parts onto phone</small></button>
+<button class="game" onclick="openGame('color')"><span>🎨</span>Phone Color Studio<small>Choose a color</small></button>
+<button class="game" onclick="openGame('memory')"><span>🧠</span>Memory Match<small>Find matching pairs</small></button>
+<button class="game" onclick="openGame('tap')"><span>⚡</span>Tap Challenge<small>Tap stars quickly</small></button>
+<button class="game" onclick="openGame('brain')"><span>🔢</span>Brain Challenge<small>Solve math questions</small></button>
+</div>
+</section>
+
+<section id="design" class="panel hidden">
+<div class="top"><h2>📱 Design Your Phone</h2><button class="btn" onclick="showHome()">← Games</button></div>
+<p>Drag a material from below and drop it anywhere on the phone. Create your own design!</p>
+<div id="phone" class="phone"><div class="screen" id="screen"></div></div>
+<div class="top"><b>Materials</b><button class="btn" onclick="resetPhone()">Reset Phone</button></div>
+<p class="status" id="designStatus">Your phone is ready!</p>
+<div class="part-tray" id="tray">
+<div class="part" data-type="camera"><span>📷</span><small>Camera</small></div>
+<div class="part" data-type="flash"><span>💡</span><small>Flash</small></div>
+<div class="part" data-type="power"><span>▰</span><small>Power key</small></div>
+<div class="part" data-type="volume"><span>▬</span><small>Volume keys</small></div>
+<div class="part" data-type="port"><span>🔌</span><small>Charging port</small></div>
+<div class="part" data-type="speaker"><span>🔊</span><small>Speaker</small></div>
+<div class="part" data-type="logo"><span>✦</span><small>Logo</small></div>
+<div class="part" data-type="screen"><span>🌈</span><small>Screen art</small></div>
+<div class="part" data-type="pen"><span>✏️</span><small>S Pen</small></div>
+<div class="part" data-type="lens"><span>🔘</span><small>Extra lens</small></div>
+<div class="part" data-type="button"><span>●</span><small>Extra button</small></div>
+<div class="part" data-type="gem"><span>💎</span><small>Decoration</small></div>
+</div>
+<p class="muted">Fan-made concept inspired by premium smartphones, not an official Samsung product.</p>
+</section>
+
+<section id="color" class="panel hidden">
+<div class="top"><h2>🎨 Phone Color Studio</h2><button class="btn" onclick="showHome()">← Games</button></div>
+<p>Choose a color for your phone.</p>
+<div id="colorPhone" class="phone"><div class="screen" id="colorScreen" style="background:linear-gradient(140deg,#1685ff,#10152b)"><div style="text-align:center;margin-top:130px;font-size:34px">✦</div></div></div>
+<div class="colors">
+<button class="dot" style="background:#10131c" onclick="setColor('#10131c')"></button>
+<button class="dot" style="background:#1677ff" onclick="setColor('#1677ff')"></button>
+<button class="dot" style="background:#8b5cf6" onclick="setColor('#8b5cf6')"></button>
+<button class="dot" style="background:#e4cda7" onclick="setColor('#e4cda7')"></button>
+<button class="dot" style="background:#18a878" onclick="setColor('#18a878')"></button>
+<button class="dot" style="background:#e94f87" onclick="setColor('#e94f87')"></button>
+</div>
+<p class="status" id="colorStatus">Pick a color!</p>
+</section>
+
+<section id="memory" class="panel hidden">
+<div class="top"><h2>🧠 Memory Match</h2><button class="btn" onclick="showHome()">← Games</button></div>
+<p>Find all eight matching pairs.</p>
+<p>Moves: <b id="moves">0</b> | Matches: <b id="matches">0</b>/8</p>
+<div id="memoryGrid"></div>
+<button class="blue" style="margin-top:14px" onclick="startMemory()">Restart Game</button>
+<p class="status" id="memoryStatus"></p>
+</section>
+
+<section id="tap" class="panel hidden">
+<div class="top"><h2>⚡ Tap Challenge</h2><button class="btn" onclick="showHome()">← Games</button></div>
+<p>Tap the star as many times as possible in 15 seconds!</p>
+<p>Time: <b id="timeLeft">15</b>s | Score: <b id="tapScore">0</b></p>
+<button class="blue" onclick="startTap()">Start Challenge</button>
+<div id="tapArea"><p style="text-align:center;padding-top:100px">Ready?</p></div>
+<p class="status" id="tapStatus"></p>
+</section>
+
+<section id="brain" class="panel hidden">
+<div class="top"><h2>🔢 Brain Challenge</h2><button class="btn" onclick="showHome()">← Games</button></div>
+<p>Solve the sum and submit your answer!</p>
+<p>Score: <b id="brainScore">0</b></p>
+<h2 id="question">Ready?</h2>
+<input id="answer" type="number" placeholder="Type your answer">
+<button class="blue" style="margin-top:12px" onclick="checkAnswer()">Submit Answer</button>
+<button class="btn" style="margin-top:12px" onclick="newQuestion()">Skip</button>
+<p class="status" id="brainStatus"></p>
+</section>
+</main>
+<footer>Mobile Game Studio · Made for creative minds</footer>
+
+<script>
+function showHome(){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById('home').classList.remove('hidden');
+ document.getElementById('home').scrollIntoView({behavior:'smooth'});
+}
+function openGame(id){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ if(id==='memory')startMemory();
+ if(id==='brain')newQuestion();
+ document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+/* GAME 1: DRAG PHONE MATERIALS */
+const phone=document.getElementById('phone');
+let selected=null,ghost=null,dx=0,dy=0;
+document.querySelectorAll('.part').forEach(part=>{
+ part.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  selected=part;
+  const r=part.getBoundingClientRect();
+  dx=e.clientX-r.left;dy=e.clientY-r.top;
+  ghost=part.cloneNode(true);
+  ghost.style.position='fixed';
+  ghost.style.left=(e.clientX-dx)+'px';
+  ghost.style.top=(e.clientY-dy)+'px';
+  ghost.style.width=r.width+'px';
+  ghost.style.zIndex='9999';
+  ghost.style.pointerEvents='none';
+  ghost.style.opacity='.9';
+  document.body.appendChild(ghost);
+ });
+});
+document.addEventListener('pointermove',e=>{
+ if(!ghost)return;
+ ghost.style.left=(e.clientX-dx)+'px';
+ ghost.style.top=(e.clientY-dy)+'px';
+});
+document.addEventListener('pointerup',e=>{
+ if(!ghost||!selected)return;
+ const r=phone.getBoundingClientRect();
+ if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+  addPart(selected.dataset.type,(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100);
+  document.getElementById('designStatus').textContent='Part added! Keep designing your phone.';
+ }else{
+  document.getElementById('designStatus').textContent='Drop the part inside the phone body.';
+ }
+ ghost.remove();ghost=null;selected=null;
+});
+function addPart(type,x,y){
+ const p=document.createElement('div');
+ p.className='piece';
+ p.style.left=x+'%';p.style.top=y+'%';
+ const art={
+ camera:'<span style="display:block;width:30px;height:30px;border-radius:50%;border:4px solid #778398;background:#111;box-shadow:inset 0 0 0 5px #333"></span>',
+ flash:'<span style="display:block;width:13px;height:13px;border-radius:50%;background:#fff2a6;box-shadow:0 0 9px #ffe88a"></span>',
+ power:'<span style="display:block;width:7px;height:42px;border-radius:4px;background:#bac5d5"></span>',
+ volume:'<span style="display:block;width:7px;height:55px;border-radius:4px;background:#bac5d5"></span>',
+ port:'<span style="display:block;width:30px;height:8px;border-radius:5px;background:#252d3b;border:2px solid #aab5c5"></span>',
+ speaker:'<span style="display:block;width:28px;height:5px;border-radius:5px;background:#bbc5d5"></span>',
+ logo:'<span style="color:white;font-size:24px;text-shadow:0 0 8px #1685ff">✦</span>',
+ screen:'<span style="display:block;width:40px;height:60px;border-radius:6px;background:linear-gradient(135deg,#20d9ff,#8a35ff,#ff5da2)"></span>',
+ pen:'<span style="font-size:24px">✏️</span>',
+ lens:'<span style="display:block;width:22px;height:22px;border-radius:50%;border:4px solid #9ba8b9;background:#121a2a"></span>',
+ button:'<span style="display:block;width:14px;height:14px;border-radius:50%;background:#c4cfdf;border:3px solid #303949"></span>',
+ gem:'<span style="font-size:23px">💎</span>'
+ };
+ p.innerHTML=art[type]||'';
+ phone.appendChild(p);
+}
+function resetPhone(){
+ phone.querySelectorAll('.piece').forEach(p=>p.remove());
+ document.getElementById('designStatus').textContent='Phone reset! Start again.';
+}
+
+/* GAME 2: COLORS */
+function setColor(c){
+ document.getElementById('colorPhone').style.borderColor=c;
+ document.getElementById('colorScreen').style.background=
+ 'linear-gradient(140deg,'+c+',#10152b)';
+ document.getElementById('colorStatus').textContent='Color changed successfully!';
+}
+
+/* GAME 3: MEMORY */
+const symbols=['📱','⭐','🎮','🚀','💎','🎧','🔥','🎯'];
+let firstCard=null,locked=false,moveCount=0,matchCount=0;
+function startMemory(){
+ const grid=document.getElementById('memoryGrid');
+ grid.innerHTML='';firstCard=null;locked=false;moveCount=0;matchCount=0;
+ document.getElementById('moves').textContent='0';
+ document.getElementById('matches').textContent='0';
+ document.getElementById('memoryStatus').textContent='';
+ [...symbols,...symbols].sort(()=>Math.random()-.5).forEach(sym=>{
+  const b=document.createElement('button');
+  b.className='mem';b.textContent='❔';b.dataset.symbol=sym;
+  b.onclick=()=>flipCard(b);
+  grid.appendChild(b);
+ });
+}
+function flipCard(card){
+ if(locked||card.classList.contains('matched')||card===firstCard)return;
+ card.textContent=card.dataset.symbol;
+ if(!firstCard){firstCard=card;return;}
+ moveCount++;
+ document.getElementById('moves').textContent=moveCount;
+ if(firstCard.dataset.symbol===card.dataset.symbol){
+  firstCard.classList.add('matched');card.classList.add('matched');
+  firstCard.disabled=true;card.disabled=true;
+  firstCard=null;matchCount++;
+  document.getElementById('matches').textContent=matchCount;
+  if(matchCount===8)document.getElementById('memoryStatus').textContent='Amazing! You found every pair! 🎉';
+ }else{
+  locked=true;
+  const previous=firstCard;
+  setTimeout(()=>{previous.textContent='❔';card.textContent='❔';firstCard=null;locked=false;},750);
+ }
+}
+
+/* GAME 4: TAP CHALLENGE */
+let tapTimer=null,tapRunning=false,tapCount=0,seconds=15;
+function startTap(){
+ clearInterval(tapTimer);tapCount=0;seconds=15;tapRunning=true;
+ document.getElementById('tapScore').textContent='0';
+ document.getElementById('timeLeft').textContent=seconds;
+ document.getElementById('tapStatus').textContent='Go! Tap the star!';
+ placeTarget();
+ tapTimer=setInterval(()=>{
+  seconds--;
+  document.getElementById('timeLeft').textContent=seconds;
+  if(seconds<=0){
+   clearInterval(tapTimer);tapRunning=false;
+   document.getElementById('tapArea').innerHTML='<p style="text-align:center;padding-top:100px">Time is up!</p>';
+   document.getElementById('tapStatus').textContent='Final score: '+tapCount+'! Play again?';
+  }
+ },1000);
+}
+function placeTarget(){
+ const area=document.getElementById('tapArea');
+ area.innerHTML='';
+ const b=document.createElement('button');b.className='target';b.textContent='⭐';
+ b.style.left=Math.random()*Math.max(0,area.clientWidth-60)+'px';
+ b.style.top=Math.random()*Math.max(0,area.clientHeight-60)+'px';
+ b.onclick=()=>{
+  if(!tapRunning)return;
+  tapCount++;document.getElementById('tapScore').textContent=tapCount;
+  placeTarget();
+ };
+ area.appendChild(b);
+}
+
+/* GAME 5: MATH */
+let correct=0,brainPoints=0;
+function newQuestion(){
+ const a=Math.floor(Math.random()*20)+1;
+ const b=Math.floor(Math.random()*20)+1;
+ correct=a+b;
+ document.getElementById('question').textContent=a+' + '+b+' = ?';
+ document.getElementById('answer').value='';
+ document.getElementById('brainStatus').textContent='';
+}
+function checkAnswer(){
+ const value=document.getElementById('answer').value.trim();
+ if(value===''){
+  document.getElementById('brainStatus').textContent='Enter an answer first!';
+  return;
+ }
+ if(Number(value)===correct){
+  brainPoints++;
+  document.getElementById('brainScore').textContent=brainPoints;
+  document.getElementById('brainStatus').textContent='Correct! 🎉 +1 point';
+ }else{
+  document.getElementById('brainStatus').textContent='Not quite! The correct answer was '+correct+'.';
+ }
+ newQuestion();
+}
+document.getElementById('answer').addEventListener('keydown',e=>{
+ if(e.key==='Enter')checkAnswer();
+});
+</script>
+</body>
+</html>
